@@ -28,23 +28,10 @@ public class ServletLogin extends HttpServlet {
 		String usuario= request.getParameter("usuario");
 		String senha= request.getParameter("senha");
 
-		saida.write("<!DOCTYPE html>");
-		saida.write("<html lang=\"pt-br\">");	
-
-		saida.write("<head>");
-		saida.write("<meta charset=\"UTF-8\">");	
-		saida.write("<title>Tela inicial</title>");	
-		saida.write("</head>");			
-
-		saida.write("<body>");		
-
 		if(autenticar(usuario, senha))
-			apresentarTelaInicial(request, saida, usuario);		
+			apresentarTelaInicial(request, response, usuario);		
 		else 
 			apresentarTelaErro(saida);
-
-		saida.write("</body>");
-		saida.write("</html>");
 
 		saida.close();
 	}
@@ -60,20 +47,31 @@ public class ServletLogin extends HttpServlet {
 		return false;
 	}
 
-	private void apresentarTelaInicial(HttpServletRequest request, PrintWriter saida, String usuario) {
+	private void apresentarTelaInicial(HttpServletRequest request, HttpServletResponse response, String usuario) throws ServletException, IOException {
 
 		HttpSession sessao= request.getSession();
 		sessao.setAttribute("usuario", usuario);
 
-		saida.write("<h1>Tela inicial</h1>");
-
-		saida.write("<p>Bem-vindo(a), " + usuario + "!</p>");
+		request.getRequestDispatcher("ServletRegistro1").forward(request, response);
 	}
 
 	private void apresentarTelaErro(PrintWriter saida) {
+		
+		saida.write("<!DOCTYPE html>");
+		saida.write("<html lang=\"pt-br\">");	
+
+		saida.write("<head>");
+		saida.write("<meta charset=\"UTF-8\">");	
+		saida.write("<title>Tela de erro</title>");	
+		saida.write("</head>");			
+
+		saida.write("<body>");
 
 		saida.write("<h1>Tela de erro</h1>");
 
 		saida.write("<p>Nao foi possivel efetuar o login.</p>");
+		
+		saida.write("</body>");
+		saida.write("</html>");
 	}
 }
